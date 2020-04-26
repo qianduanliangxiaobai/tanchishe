@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贪吃蛇小游戏</title>
+    <style>
+      
+      
+    </style>
+    <script>
+        //定义一个点对象
+        function Point(x,y){
+            this.x=x;
+            this.y=y;
+            this.getX=function(){
+                return x;
+            }
+            this.getY=function(){
+                return y;
+            }
+        }
+        //初始化地图
+        function initMap() {
+        var map = document.getElementById("map");//找到跟节点
+        for (var i = 0; i < 20; i++) {
+            var tr = document.createElement("tr");//创建节点
+            for (var j = 0; j < 20; j++) {
+                var td = document.createElement("td");//创建节点
+                td.setAttribute("id", "td" + i +"_"+ j);//设置id值 方便后续的查找 设置值
+                tr.appendChild(td);//添加节点
+            }
+            map.appendChild(tr);//加入值
+          }
+        }
+        //初始化食物
+        function initFood(){
+            var x=parseInt(Math.random()*20);
+            var y=parseInt(Math.random()*20);
+            //创建食物点
+            var foodDot=new Point(x,y);
+            //获取食物点
+            var food=document.getElementById("td"+x+"_"+y);
+            food.style.background="yellow";
+           
+        }
+        //全局定义小蛇数组
+        var snake=[];
+        //DOM操作
+        function setDom(){
+           //获取DOM
+           var tdBody=document.getElementById("td"+snake[1].getX()+"_"+snake[1].getY());
+           var tdTail=document.getElementById("td"+snake[2].getX()+"_"+snake[2].getY());
+           var tdHead=document.getElementById("td"+snake[0].getX()+"_"+snake[0].getY());
+          
+           //设置DOM颜色   
+           tdBody.style.background="red";
+           tdHead.style.background="blue";
+           tdTail.style.background="green";
+       
+        }
+        //删除DOM操作
+        function delDom(e){
+            // var last=snake.length-1;
+            var delTd=document.getElementById("td"+e.getX()+"_"+e.getY());
+            delTd.style.background="white"
+        }
+
+       //初始化小蛇
+       function initSnake(){
+           var x=10;
+           var y=10;
+           var dir;//蛇的移动方向
+            //设置点的值
+           var point3=new Point(x,y-1);
+           var point2=new Point(x,y);
+           var point1=new Point(x,y+1);
+           //将对象放入数组中去
+           snake.push(point1);
+           snake.push(point2);
+           snake.push(point3);
+           setDom();
+    
+          
+       }
+
+       //蛇的移动
+       //向右移动   
+       function moveRight(){
+            var oldHead=snake[0];//旧蛇头位置
+            var oldTail=snake[2];//旧蛇尾位置
+
+            //更新蛇的坐标
+            for(var i=snake.length-1;i>0;i--){
+                snake[i]=snake[i-1]
+            }
+            snake[0]=new Point(oldHead.getX(),oldHead.getY()+1);
+            console.log(snake);
+            delDom(oldTail);
+            setDom();//这里不能加this
+       }
+
+       //向下移动
+       function moveBottom(){
+            var oldHead=snake[0];//旧蛇头位置
+            var oldTail=snake[2];//旧蛇尾位置
+            console.log(snake[2]);
+            //更新蛇的坐标
+            for(var i=snake.length-1;i>0;i--){
+                snake[i]=snake[i-1]
+            }
+            snake[0]=new Point(oldHead.getX()+1,oldHead.getY());
+            setDom();
+            delDom(oldTail);
+       }
+       //选择方向
+       document.onkeydown=function(e){
+            switch(e.keyCode){
+               case 40:moveBottom() ;break; 
+               case 39:moveRight();break;   
+               break
+       }
+       }
+       
+
+
+    </script>
+</head>
+<body>
+    <button>开始游戏</button>
+    <table id="map" border="3" width="500px" height="500px" style="border-collapse:collapse;margin: 0 auto;">
+                <caption style="color: red;font-size: larger;">贪吃蛇游戏</caption>
+            </table>
+        
+</body>
+<script type="text/javascript">
+   
+        initMap();//初始化地图
+        initSnake();//初始化小蛇
+        initFood();//初始化食物
+       
+
+    </script>
+</html>
