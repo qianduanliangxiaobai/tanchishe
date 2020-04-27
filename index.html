@@ -39,8 +39,13 @@
             //随机食物点
             var x=parseInt(Math.random()*20);
             var y=parseInt(Math.random()*20);
-            //随机食物颜色
-            var r=parseInt(Math.random()*255);
+            if(snake.some(e=>{
+                return e.x==x&&e.y==y;
+            })){
+                initFood()
+            }else{
+                   //随机食物颜色
+            var r=parseInt(Math.random()*188);
             var g=parseInt(Math.random()*188);//为了避免白色而设置的小于255的数
             var b=parseInt(Math.random()*188);
             var a=Math.random();       
@@ -50,6 +55,7 @@
             var food=document.getElementById("td"+x+"_"+y);
             //rgb这里传变量必须用双引号。
             food.style.background="rgb("+r+","+g+","+b+")";
+            }
            
                
         }
@@ -63,7 +69,7 @@
            var tdTail=document.getElementById("td"+snake[2].getX()+"_"+snake[2].getY());
            var tdHead=document.getElementById("td"+snake[0].getX()+"_"+snake[0].getY());
            if(snake.length>3){
-              
+              //只需要设置3  ，之后会因为for循环  把4、5、6等都加上背景颜色属性
                var foodEaten=document.getElementById("td"+snake[3].getX()+"_"+snake[3].getY());
                foodEaten.style.background="hotpink";
            
@@ -103,6 +109,7 @@
        //蛇的移动
        //封装蛇的移动中重复的代码
        function moveRepeat(x,y){
+           try {
             var oldHead=snake[0];//旧蛇头位置
             var oldTail=snake[snake.length-1];//旧蛇尾位置
              //更新蛇的坐标
@@ -112,6 +119,19 @@
             snake[0]=new Point(oldHead.getX()+x,oldHead.getY()+y);
             delDom(oldTail);
             setDom();//这里不能加this
+              //判断游戏是否结束
+            //碰墙或者碰到自己
+            //先判断是否碰到自己，若先判断是否吃到了食物，会由于
+            //push方法 最后一个和s【0】相同而导致触碰尾巴不触发游戏结束
+            var snake2=snake.slice(1)
+            if(snake2.some(e=>{
+                return e.x==snake[0].x&&e.y==snake[0].y
+            })){
+                console.log(1111);
+                clearInterval(mySet);
+                alert('game over');
+                window.location.reload();
+            }
           
             //判断是否吃到了食物
        
@@ -119,14 +139,26 @@
                 snake.push(foodDot);
                 console.log(snake);
                 initFood();
-               
             }
+            console.log(snake);
+          
+           } catch (error) {
+                console.log(1111);
+                clearInterval(mySet);
+                alert('game over');
+                window.location.reload();
+           }
             
+       }
+       //定时器函数
+       var mySet;
+       function setTime(e){
+           mySet =setInterval(e,300)
        }
        //向右移动   
        function moveRight(){
-         if(snake[1].y<=snake[0].y){
-           moveRepeat(0,1);   
+         if(snake[1].y<=snake[0].y){     
+               moveRepeat(0,1)  
          }
        }
        //向下移动
@@ -150,12 +182,11 @@
        //选择方向
        document.onkeydown=function(e){
             switch(e.keyCode){
-               case 37:moveLeft();break;
-               case 38:moveTop();break;
-               case 40:moveBottom() ;break; 
-               case 39:moveRight();break;   
-               break
-       }
+               case 37:clearInterval(mySet);setTime(moveLeft);break;
+               case 38:clearInterval(mySet);setTime(moveTop);break;
+               case 40:clearInterval(mySet);setTime(moveBottom) ;break; 
+               case 39: clearInterval(mySet);setTime(moveRight);break;    
+            }
        }
        
 
