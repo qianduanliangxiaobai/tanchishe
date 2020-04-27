@@ -33,16 +33,24 @@
             map.appendChild(tr);//加入值
           }
         }
+       
         //初始化食物
         function initFood(){
+            //随机食物点
             var x=parseInt(Math.random()*20);
             var y=parseInt(Math.random()*20);
+            //随机食物颜色
+            var r=parseInt(Math.random()*255);
+            var g=parseInt(Math.random()*255);
+            var b=parseInt(Math.random()*255);
+            var a=Math.random();       
             //创建食物点
             var foodDot=new Point(x,y);
             //获取食物点
             var food=document.getElementById("td"+x+"_"+y);
-            food.style.background="yellow";
-           
+            //rgb这里传变量必须用双引号。
+            food.style.background="rgb("+r+","+g+","+b+")";
+            console.log(food.style.background)       
         }
         //全局定义小蛇数组
         var snake=[];
