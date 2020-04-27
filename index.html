@@ -87,6 +87,8 @@
        //蛇的移动
        //向右移动   
        function moveRight(){
+         if(snake[1].y<=snake[0].y){
+
             var oldHead=snake[0];//旧蛇头位置
             var oldTail=snake[2];//旧蛇尾位置
 
@@ -98,10 +100,13 @@
             console.log(snake);
             delDom(oldTail);
             setDom();//这里不能加this
+         }
        }
 
        //向下移动
        function moveBottom(){
+         if(snake[1].x<=snake[0].x){
+         
             var oldHead=snake[0];//旧蛇头位置
             var oldTail=snake[2];//旧蛇尾位置
             console.log(snake[2]);
@@ -112,10 +117,44 @@
             snake[0]=new Point(oldHead.getX()+1,oldHead.getY());
             setDom();
             delDom(oldTail);
+         }
+       }
+       //向左移动
+       function moveLeft(){
+           if(snake[1].y>=snake[0].y){
+            var oldHead=snake[0];//旧蛇头位置
+            var oldTail=snake[2];//旧蛇尾位置
+            console.log(snake[2]);
+            //更新蛇的坐标
+            for(var i=snake.length-1;i>0;i--){
+                snake[i]=snake[i-1]
+            }
+            snake[0]=new Point(oldHead.getX(),oldHead.getY()-1);
+            setDom();
+            delDom(oldTail);
+           }
+       }
+       //向上移动
+       function moveTop(){
+         if(snake[1].x>=snake[0].x){
+
+            var oldHead=snake[0];//旧蛇头位置
+            var oldTail=snake[2];//旧蛇尾位置
+            console.log(snake[2]);
+            //更新蛇的坐标
+            for(var i=snake.length-1;i>0;i--){
+                snake[i]=snake[i-1]
+            }
+            snake[0]=new Point(oldHead.getX()-1,oldHead.getY());
+            setDom();
+            delDom(oldTail);
+         }
        }
        //选择方向
        document.onkeydown=function(e){
             switch(e.keyCode){
+               case 37:moveLeft();break;
+               case 38:moveTop();break;
                case 40:moveBottom() ;break; 
                case 39:moveRight();break;   
                break
