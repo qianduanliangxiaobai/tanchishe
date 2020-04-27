@@ -85,69 +85,40 @@
        }
 
        //蛇的移动
+       //封装蛇的移动中重复的代码
+       function moveRepeat(x,y){
+            var oldHead=snake[0];//旧蛇头位置
+            var oldTail=snake[2];//旧蛇尾位置
+             //更新蛇的坐标
+            for(var i=snake.length-1;i>0;i--){
+                snake[i]=snake[i-1]
+            }
+            snake[0]=new Point(oldHead.getX()+x,oldHead.getY()+y);
+            delDom(oldTail);
+            setDom();//这里不能加this
+       }
        //向右移动   
        function moveRight(){
          if(snake[1].y<=snake[0].y){
-
-            var oldHead=snake[0];//旧蛇头位置
-            var oldTail=snake[2];//旧蛇尾位置
-
-            //更新蛇的坐标
-            for(var i=snake.length-1;i>0;i--){
-                snake[i]=snake[i-1]
-            }
-            snake[0]=new Point(oldHead.getX(),oldHead.getY()+1);
-            console.log(snake);
-            delDom(oldTail);
-            setDom();//这里不能加this
+           moveRepeat(0,1);   
          }
        }
-
        //向下移动
        function moveBottom(){
          if(snake[1].x<=snake[0].x){
-         
-            var oldHead=snake[0];//旧蛇头位置
-            var oldTail=snake[2];//旧蛇尾位置
-            console.log(snake[2]);
-            //更新蛇的坐标
-            for(var i=snake.length-1;i>0;i--){
-                snake[i]=snake[i-1]
-            }
-            snake[0]=new Point(oldHead.getX()+1,oldHead.getY());
-            setDom();
-            delDom(oldTail);
+             moveRepeat(1,0);
          }
        }
        //向左移动
        function moveLeft(){
-           if(snake[1].y>=snake[0].y){
-            var oldHead=snake[0];//旧蛇头位置
-            var oldTail=snake[2];//旧蛇尾位置
-            console.log(snake[2]);
-            //更新蛇的坐标
-            for(var i=snake.length-1;i>0;i--){
-                snake[i]=snake[i-1]
-            }
-            snake[0]=new Point(oldHead.getX(),oldHead.getY()-1);
-            setDom();
-            delDom(oldTail);
+           if(snake[1].y>=snake[0].y){       
+               moveRepeat(0,-1);   
            }
        }
        //向上移动
        function moveTop(){
          if(snake[1].x>=snake[0].x){
-
-            var oldHead=snake[0];//旧蛇头位置
-            var oldTail=snake[2];//旧蛇尾位置
-            console.log(snake[2]);
-            //更新蛇的坐标
-            for(var i=snake.length-1;i>0;i--){
-                snake[i]=snake[i-1]
-            }
-            snake[0]=new Point(oldHead.getX()-1,oldHead.getY());
-            setDom();
-            delDom(oldTail);
+             moveRepeat(-1,0);
          }
        }
        //选择方向
