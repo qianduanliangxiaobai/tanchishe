@@ -41,29 +41,37 @@
             var y=parseInt(Math.random()*20);
             //随机食物颜色
             var r=parseInt(Math.random()*255);
-            var g=parseInt(Math.random()*255);
-            var b=parseInt(Math.random()*255);
+            var g=parseInt(Math.random()*188);//为了避免白色而设置的小于255的数
+            var b=parseInt(Math.random()*188);
             var a=Math.random();       
             //创建食物点
-            var foodDot=new Point(x,y);
-            //获取食物点
+            foodDot=new Point(x,y);
+            //获取食物点dom
             var food=document.getElementById("td"+x+"_"+y);
             //rgb这里传变量必须用双引号。
             food.style.background="rgb("+r+","+g+","+b+")";
-            console.log(food.style.background)       
+           
+               
         }
         //全局定义小蛇数组
         var snake=[];
+        var foodDot={};
         //DOM操作
         function setDom(){
            //获取DOM
            var tdBody=document.getElementById("td"+snake[1].getX()+"_"+snake[1].getY());
            var tdTail=document.getElementById("td"+snake[2].getX()+"_"+snake[2].getY());
            var tdHead=document.getElementById("td"+snake[0].getX()+"_"+snake[0].getY());
+           if(snake.length>3){
+              
+               var foodEaten=document.getElementById("td"+snake[3].getX()+"_"+snake[3].getY());
+               foodEaten.style.background="hotpink";
+           
+           }
           
            //设置DOM颜色   
-           tdBody.style.background="red";
-           tdHead.style.background="blue";
+           tdBody.style.background="green";
+           tdHead.style.background="red";
            tdTail.style.background="green";
        
         }
@@ -96,7 +104,7 @@
        //封装蛇的移动中重复的代码
        function moveRepeat(x,y){
             var oldHead=snake[0];//旧蛇头位置
-            var oldTail=snake[2];//旧蛇尾位置
+            var oldTail=snake[snake.length-1];//旧蛇尾位置
              //更新蛇的坐标
             for(var i=snake.length-1;i>0;i--){
                 snake[i]=snake[i-1]
@@ -104,6 +112,16 @@
             snake[0]=new Point(oldHead.getX()+x,oldHead.getY()+y);
             delDom(oldTail);
             setDom();//这里不能加this
+          
+            //判断是否吃到了食物
+       
+            if(snake[0].x==foodDot.x&&snake[0].y==foodDot.y){
+                snake.push(foodDot);
+                console.log(snake);
+                initFood();
+               
+            }
+            
        }
        //向右移动   
        function moveRight(){
